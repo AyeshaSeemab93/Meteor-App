@@ -12,7 +12,10 @@ import { TasksCollection } from '../api/TasksCollection';
 
 export const App = () => {
   //fetching the data from the collection and passing it to the Task component
-  const tasks = useTracker(()=>{ return TasksCollection.find({}).fetch()});
+  //useTracker creates a reactive data dependency to render the component when the data changes
+  const tasks = useTracker(()=>{ 
+    return TasksCollection.find({}).fetch()
+  });
 
   return(
   <div>
