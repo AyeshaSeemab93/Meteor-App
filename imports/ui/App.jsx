@@ -60,6 +60,9 @@ export const App = () => {
         )}
       </ul>
       </div>
+      <footer>
+        Created using Meteor!
+      </footer>
   </div>
   )
 };

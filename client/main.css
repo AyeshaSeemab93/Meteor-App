@@ -11,6 +11,7 @@ body {
   padding: 0;
   margin: 0;
   font-size: 14px;
+  
 }
 button {
   font-weight: bold;
@@ -155,4 +156,16 @@ header {
 .tasks > li > button {
   justify-self: flex-end;
   background-color: #ff3046;
+}
+footer{
+  background: #d2edf4;
+  background-image: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
+  padding: 20px 15px 15px 15px;
+  position: relative;
+  box-shadow: 0 3px 3px rgba(34, 25, 25, 0.4);
+  text-align: left;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
 }
