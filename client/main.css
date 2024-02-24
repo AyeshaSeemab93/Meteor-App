@@ -111,7 +111,16 @@ header {
   display: flex;
   margin: 16px;
 }
-
+.filter {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px;
+}
+.filter > button {
+  background-color: #31815e;
+  margin: 0 0.5em;
+  padding: 0.5em 1em;
+}
 .task-form > input {
   flex-grow: 1;
   box-sizing: border-box;
