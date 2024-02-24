@@ -5,15 +5,32 @@ import {Meteor} from 'meteor/meteor';
 import {Accounts} from 'meteor/accounts-base';
 import {TasksCollection} from '/imports/api/TasksCollection';
 
+const insertTask = (taskText) =>{
+  TasksCollection.insert({
+    text: taskText,
+    userId: user._id, //userId is the id of the user who is logged in
+    createdAt: new Date(),
+  })
+}
+
 const SEED_USERNAME = 'ayesha123'; //SEED means default
 const SEED_PASSWORD = 'password';
 
-const insertTask = (taskText) =>{
-  TasksCollection.insert({text: taskText})
-}
-// Code to run when the server starts up
-Meteor.startup(() => 
-{
+const user = Accounts.findUserByUsername(SEED_USERNAME);
+
+Meteor.startup(()=>{
+  if(!user){
+    Accounts.createUser({
+      username: SEED_USERNAME,
+      password: SEED_PASSWORD
+    });
+    console.log(user._id);
+  }
+});
+
+
+
+//if no data is present in the collection then add this default data to the collection
   if(TasksCollection.find().count() === 0)
   {
     [
@@ -23,13 +40,5 @@ Meteor.startup(() =>
     ].forEach(insertTask)
 
   }
-});
-//if no data is present in the collection then add this default data to the collection
-Meteor.startup(()=>{
-  if(!Accounts.findUserByUsername(SEED_USERNAME)){
-    Accounts.createUser({
-      username: SEED_USERNAME,
-      password: SEED_PASSWORD
-    });
-  }
-});
+
+
