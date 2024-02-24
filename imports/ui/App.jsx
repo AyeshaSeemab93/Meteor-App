@@ -1,10 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
+import { Fragment } from 'react';
 import { Task } from './Task.jsx';
+import { Meteor } from 'meteor/meteor';
 // importing hook from package(react-meteor-data) to add reactivity to the component
 import { useTracker } from 'meteor/react-meteor-data';
 import { TasksCollection } from '../api/TasksCollection';
 import { TaskForm } from './TaskForm';
+import { LoginForm } from './LoginForm.jsx';
 
 // const tasks = [
 //   {_id: 1, text: 'This is task 1'},
@@ -22,7 +25,12 @@ const toggleChecked = ({ _id, isChecked }) => {
 const deleteTask = ({_id}) =>{
  TasksCollection.remove(_id);
 }
+
+
 export const App = () => {
+  
+  const user = useTracker(()=> Meteor.user());
+  //Meteor.user() returns the current user
  
  const[hideCompleted, setHideCompleted] = useState(false);
 
@@ -49,20 +57,24 @@ export const App = () => {
       <div className="app-bar">
         <div className="app-header">
           <h1>TO DO LIST {pendingTasksCount ? `(${pendingTasksCount})`: ""}</h1>
+          {/* if task count true(1,2,3)show count if 0 means false, show empty string */}
         </div>
       </div>
     </header>
 
     <div className="main">
-     <TaskForm /> 
-   <div className='filter'>
-      <button onClick={()=> setHideCompleted(!hideCompleted)}> 
-      {/* everytime on clicking the button true false true false*/}
-        {hideCompleted ? "Show All" : "Hide Completed Tasks"}
-      </button>
+      {/* if user is correct then show fragment portion else show login form*/}
+   {user ? (<Fragment>
+      <TaskForm /> 
 
-   </div>
-     <ul className='tasks'>
+      <div className='filter'>
+          <button onClick={()=> setHideCompleted(!hideCompleted)}> 
+          {/* everytime on clicking the button true false true false*/}
+            {hideCompleted ? "Show All" : "Hide Completed Tasks"}
+          </button>
+      </div>
+
+      <ul className='tasks'>
       {tasks.map(task => 
         <Task 
           key={task._id} 
@@ -71,7 +83,9 @@ export const App = () => {
           onDeleteClick={deleteTask}/>
         )}
       </ul>
-      </div>
+    </Fragment> ):(<LoginForm/>)}
+    </div>
+       
       <footer>
         Created using Meteor!
       </footer>
