@@ -12,7 +12,8 @@ export const Task = ({ task, onCheckboxClick , onDeleteClick}) => {
             />
             
             <span>{task.text}</span>
-            <button onClick={()=>{onDeleteClick(task)}}>Delete</button>
+            <button onClick={ () => onDeleteClick(task) }>&times;</button>
+            {/* >&times; = cross sign */}
         </li>
             
 
