@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { Fragment } from 'react';
 import { Task } from './Task.jsx';
 import { Meteor } from 'meteor/meteor';
@@ -67,7 +68,20 @@ export const App = () => {
     }
     return TasksCollection.find(pendingOnlyFilter).count()
   });
-    
+
+
+  
+  //for debugging
+  //1 by writing directly
+  console.log("User object1:", user);
+  console.log("Pending tasks count1:", pendingTasksCount);
+  //2 by using useEffect
+  useEffect(() => {
+    console.log("User object2:", user);
+    console.log("User username2:", user?.username || user?.profile?.name);
+  }, [user]);
+ // useEffect is better because it runs after the component is rendered and the user object is updated
+
 
   return(
   <div className='app'>
@@ -84,7 +98,8 @@ export const App = () => {
       {/* if user is correct then show fragment portion else show login form*/}
    {user ? (<Fragment>
     <div className="user" onClick={logout}>
-        {user.username} 🚪
+   
+    {user.username || user.profile.name} 🚪
       </div>
       <TaskForm  user={user}/> 
 
