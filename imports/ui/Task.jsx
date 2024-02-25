@@ -21,6 +21,7 @@ export const Task = ({ task, onCheckboxClick , onDeleteClick}) => {
 };
 
   // task = {
+    //   _id: 1,
   //   text: text.trim(),
   //   createdAt: new Date()
   // };

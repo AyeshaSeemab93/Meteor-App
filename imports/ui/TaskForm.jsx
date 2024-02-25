@@ -2,7 +2,7 @@ import React from "react";
 import {useState} from "react";
 import {TasksCollection} from "../api/TasksCollection";
 
-export const TaskForm = () => {
+export const TaskForm = ({user}) => {
   const [text, setText] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,6 +12,7 @@ export const TaskForm = () => {
     //inserting the task(obj)into the collection
     TasksCollection.insert({
       text: text.trim(),
+      userId: user._id, // receiving the user id from the props/app.jsx
       createdAt: new Date()
     });
     //clearing the input field

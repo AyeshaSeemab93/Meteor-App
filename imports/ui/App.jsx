@@ -14,6 +14,8 @@ import { LoginForm } from './LoginForm.jsx';
 //   {_id: 2, text: 'This is task 2'},
 //   {_id: 3, text: 'This is task 3'}
 // ]
+
+//: Updates the isChecked field in the task  when a task's checkbox is clicked(Task Component).
 const toggleChecked = ({ _id, isChecked }) => {
   TasksCollection.update(_id, {
     $set: {
@@ -27,29 +29,45 @@ const deleteTask = ({_id}) =>{
 }
 
 
+
+
 export const App = () => {
   
   const user = useTracker(()=> Meteor.user());
-  //Meteor.user() returns the current user
+  //Meteor.user() returns the current user, if no user then null
+  const logout = () => Meteor.logout();// logout function called  when the button is clicked
  
  const[hideCompleted, setHideCompleted] = useState(false);
 
   //fetching the data from the collection and passing it to the Task component
-  const hideCompletedFilter = {isChecked: {$ne: true}};
-//filter to show only the unchecked tasks ($ne:true means not equal to true)
+  const hideCompletedFilter = {isChecked: {$ne: true}};//filter to show only the unchecked tasks ($ne:true means not equal to true)
+  const userFilter = user ? {userId: user._id} : {}; //if user exist then create an object with userId else empty object.  filter tasks based on the userId
+  const pendingOnlyFilter = {...hideCompletedFilter, ...userFilter}; // merge two filters into a single filter using spread syntax(...)
+
   //useTracker creates a reactive data dependency to render the component when the data changes
-  const tasks = useTracker(()=>{
-    return TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {sort: {createdAt: -1}}).fetch();
+  // const tasks = useTracker(()=>{
+  //   return TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {sort: {createdAt: -1}}).fetch();
+  // })
+   const tasks = useTracker(()=>{
+    return TasksCollection.find(hideCompleted ? pendingOnlyFilter : userFilter, {sort: {createdAt: -1}}).fetch();
   })
+  
   //{sort:{createdAt: -1}} to get the newest first(-1 for descending order, 1 for ascending order)
   // {
   //   text: text.trim(),
   //   createdAt: new Date()
   // };
- const pendingTasksCount = useTracker(()=>{
-  return TasksCollection.find(hideCompletedFilter).count()
- });
-  
+
+//  const pendingTasksCount = useTracker(()=>{
+//   return TasksCollection.find(hideCompletedFilter).count()
+//  });
+  const pendingTasksCount = useTracker(()=>{
+    if(!user){
+      return 0;
+    }
+    return TasksCollection.find(pendingOnlyFilter).count()
+  });
+    
 
   return(
   <div className='app'>
@@ -65,7 +83,10 @@ export const App = () => {
     <div className="main">
       {/* if user is correct then show fragment portion else show login form*/}
    {user ? (<Fragment>
-      <TaskForm /> 
+    <div className="user" onClick={logout}>
+        {user.username} 🚪
+      </div>
+      <TaskForm  user={user}/> 
 
       <div className='filter'>
           <button onClick={()=> setHideCompleted(!hideCompleted)}> 

@@ -1,17 +1,17 @@
-// 1 Importing collection  from api folder and adding data to into it
+// 1 Importing collection  from api folder and adding data into it
 // 2 Creating user accounts
 
 import {Meteor} from 'meteor/meteor';
 import {Accounts} from 'meteor/accounts-base';
 import {TasksCollection} from '/imports/api/TasksCollection';
 
-const insertTask = (taskText) =>{
+const insertTask = (taskText, user) =>
   TasksCollection.insert({
     text: taskText,
-    userId: user._id, //userId is the id of the user who is logged in
+    userId: user._id, //adding id of current user to the task
     createdAt: new Date(),
-  })
-}
+  });
+
 
 const SEED_USERNAME = 'ayesha123'; //SEED means default
 const SEED_PASSWORD = 'password';
