@@ -3,9 +3,10 @@
 // 3 Adding github login service
 
 import {Meteor} from 'meteor/meteor';
-import {Accounts} from 'meteor/accounts-base';
+import {Accounts} from 'meteor/accounts-base';//for creating user accounts
 import {TasksCollection} from '/imports/api/TasksCollection';
-import {ServiceConfiguration} from 'meteor/service-configuration';
+import {ServiceConfiguration} from 'meteor/service-configuration';//for github login
+import '/imports/api/tasksMethods';//importing the methods.this will register the methods on the server
 
 const insertTask = (taskText, user) =>
   TasksCollection.insert({
@@ -13,6 +14,17 @@ const insertTask = (taskText, user) =>
     userId: user._id, //adding id of current user to the task
     createdAt: new Date(),
   });
+
+  //if no data is present in the collection then add this default data to the collection
+  if(TasksCollection.find().count() === 0)
+  {
+    [
+      '1 task',
+      '2 task',
+      '3 task'
+    ].forEach(insertTask)
+
+  }
 
 
 const SEED_USERNAME = 'ayesha123'; //SEED means default
@@ -30,18 +42,6 @@ Meteor.startup(()=>{
   }
 });
 
-
-
-//if no data is present in the collection then add this default data to the collection
-  if(TasksCollection.find().count() === 0)
-  {
-    [
-      '1 task',
-      '2 task',
-      '3 task'
-    ].forEach(insertTask)
-
-  }
 
 //configure our server to fully connect to Github
   ServiceConfiguration.configurations.upsert(

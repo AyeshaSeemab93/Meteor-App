@@ -10,6 +10,7 @@ export const TaskForm = ({user}) => {
     if(!text) return; //if text is empty,falsy,NaN, 0 , Undefinded then return
 
     //inserting the task(obj)into the collection
+    //(same code in server/main.j here it  triggers a request to the server where actuall insertion happens)
     TasksCollection.insert({
       text: text.trim(),
       userId: user._id, // receiving the user id from the props/app.jsx
