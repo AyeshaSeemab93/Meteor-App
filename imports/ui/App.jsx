@@ -6,7 +6,7 @@ import { Task } from './Task.jsx';
 import { Meteor } from 'meteor/meteor';
 // importing hook from package(react-meteor-data) to add reactivity to the component
 import { useTracker } from 'meteor/react-meteor-data';
-import { TasksCollection } from '../api/TasksCollection';
+import { TasksCollection } from '../../db/TasksCollection.js';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm.jsx';
 
@@ -18,15 +18,17 @@ import { LoginForm } from './LoginForm.jsx';
 
 //: Updates the isChecked field in the task  when a task's checkbox is clicked(Task Component).
 const toggleChecked = ({ _id, isChecked }) => {
-  TasksCollection.update(_id, {
-    $set: {
-      isChecked: !isChecked
-    }
-  })
+  Meteor.call('tasks.setIsChecked', _id, !isChecked);
+  // TasksCollection.update(_id, {
+  //   $set: {
+  //     isChecked: !isChecked
+  //   }
+  // })
 };
 
 const deleteTask = ({_id}) =>{
- TasksCollection.remove(_id);
+//  TasksCollection.remove(_id);
+  Meteor.call('tasks.remove', _id);
 }
 
 
@@ -101,7 +103,7 @@ export const App = () => {
    
     {user.username || user.profile.name} 🚪
       </div>
-      <TaskForm  user={user}/> 
+      <TaskForm /> 
 
       <div className='filter'>
           <button onClick={()=> setHideCompleted(!hideCompleted)}> 

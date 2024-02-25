@@ -4,7 +4,7 @@
 
 import {Meteor} from 'meteor/meteor';
 import {Accounts} from 'meteor/accounts-base';//for creating user accounts
-import {TasksCollection} from '/imports/api/TasksCollection';
+import {TasksCollection} from '../db/TasksCollection';
 import {ServiceConfiguration} from 'meteor/service-configuration';//for github login
 import '/imports/api/tasksMethods';//importing the methods.this will register the methods on the server
 

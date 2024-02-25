@@ -3,7 +3,7 @@
 
 import { Meteor } from "meteor/meteor";
  //importing the DBcollection
-import { TasksCollection } from "/imports/api/TasksCollection";
+import { TasksCollection } from "../../db/TasksCollection"
 import { check } from "meteor/check";
 
 Meteor.methods(
