@@ -1,9 +1,11 @@
 // 1 Importing collection  from api folder and adding data into it
 // 2 Creating user accounts
+// 3 Adding github login service
 
 import {Meteor} from 'meteor/meteor';
 import {Accounts} from 'meteor/accounts-base';
 import {TasksCollection} from '/imports/api/TasksCollection';
+import {ServiceConfiguration} from 'meteor/service-configuration';
 
 const insertTask = (taskText, user) =>
   TasksCollection.insert({
@@ -41,4 +43,14 @@ Meteor.startup(()=>{
 
   }
 
-
+//configure our server to fully connect to Github
+  ServiceConfiguration.configurations.upsert(
+    { service: 'github' },
+    {
+      $set: {
+        loginStyle: 'popup',
+        clientId: '7d0ff7a96b556b6dfcf9', // insert your clientId here(we get this from github developer settings)
+        secret: '78207ab49abe5ef5823150ea1cbd1ce838e2c94f', // insert your secret here
+      },
+    }
+  );

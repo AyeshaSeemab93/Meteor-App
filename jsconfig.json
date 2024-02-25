@@ -55,6 +55,17 @@
         "/Users/s2300304/.meteor/packages/accounts-password/2.4.0/web.browser/password_client.js",
         "/Users/s2300304/.meteor/packages/accounts-password/2.4.0/web.browser/email_templates.js",
         "/Users/s2300304/.meteor/packages/accounts-password/2.4.0/web.browser/password_server.js"
+      ],
+      "meteor/github": [
+        "/Users/s2300304/.meteor/packages/github/1.1.1-pre.1/web.browser//packages/github.js"
+      ],
+      "meteor/accounts-github": [
+        "/Users/s2300304/.meteor/packages/accounts-github/1.5.0/web.browser/notice.js",
+        "/Users/s2300304/.meteor/packages/accounts-github/1.5.0/web.browser/github.js"
+      ],
+      "meteor/service-configuration": [
+        "/Users/s2300304/.meteor/packages/service-configuration/1.3.3/web.browser/service_configuration_common.js",
+        "/Users/s2300304/.meteor/packages/service-configuration/1.3.3/web.browser/service_configuration_server.js"
       ]
     }
   },
