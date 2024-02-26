@@ -6,7 +6,12 @@ export const LoginWithGithub = () => {
     Meteor.loginWithGithub({
       requestPermissions: ['user'],
       loginStyle: 'popup',
-    });
+    }, (err) => {
+    if(err) console.log("Github login error:", err);
+    
+  });
+  console.log("Github login clicked");
+  console.log("User object:", Meteor.user());
   };
 
   return (

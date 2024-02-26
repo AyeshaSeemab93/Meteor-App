@@ -4,17 +4,13 @@ import { useEffect } from 'react';
 import { Fragment } from 'react';
 import { Task } from './Task.jsx';
 import { Meteor } from 'meteor/meteor';
-// importing hook from package(react-meteor-data) to add reactivity to the component
+// importing useTracker hook from package(react-meteor-data) to add reactivity to the component
 import { useTracker } from 'meteor/react-meteor-data';
 import { TasksCollection } from '../../db/TasksCollection.js';
 import { TaskForm } from './TaskForm';
 import { LoginForm } from './LoginForm.jsx';
 
-// const tasks = [
-//   {_id: 1, text: 'This is task 1'},
-//   {_id: 2, text: 'This is task 2'},
-//   {_id: 3, text: 'This is task 3'}
-// ]
+
 
 //: Updates the isChecked field in the task  when a task's checkbox is clicked(Task Component).
 const toggleChecked = ({ _id, isChecked }) => {
@@ -36,9 +32,9 @@ const deleteTask = ({_id}) =>{
 
 export const App = () => {
   
-  const user = useTracker(()=> Meteor.user());
+   const user = useTracker(()=> Meteor.user());
   //Meteor.user() returns the current user, if no user then null
-  const logout = () => Meteor.logout();// logout function called  when the button is clicked
+  
  
  const[hideCompleted, setHideCompleted] = useState(false);
 
@@ -48,12 +44,12 @@ export const App = () => {
   const pendingOnlyFilter = {...hideCompletedFilter, ...userFilter}; // merge two filters into a single filter using spread syntax(...)
 
   //useTracker creates a reactive data dependency to render the component when the data changes
-  // const tasks = useTracker(()=>{
+  // >>const tasks = useTracker(()=>{
   //   return TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {sort: {createdAt: -1}}).fetch();
   // })
-   const tasks = useTracker(()=>{
-    return TasksCollection.find(hideCompleted ? pendingOnlyFilter : userFilter, {sort: {createdAt: -1}}).fetch();
-  })
+  //  const tasks = useTracker(()=>{
+  //   return TasksCollection.find(hideCompleted ? pendingOnlyFilter : userFilter, {sort: {createdAt: -1}}).fetch();
+  // })
   
   //{sort:{createdAt: -1}} to get the newest first(-1 for descending order, 1 for ascending order)
   // {
@@ -64,16 +60,58 @@ export const App = () => {
 //  const pendingTasksCount = useTracker(()=>{
 //   return TasksCollection.find(hideCompletedFilter).count()
 //  });
-  const pendingTasksCount = useTracker(()=>{
-    if(!user){
-      return 0;
+  // >>const pendingTasksCount = useTracker(()=>{
+  //   if(!user){
+  //     return 0;
+  //   }
+  //   return TasksCollection.find(pendingOnlyFilter).count()
+  // });
+//activatin subscription to get the data from the server(to use publications)
+  // >>const isLoading = useTracker(()=>{
+  //   const noDataAvailable = {
+  //     tasks: [],
+  //     pendingTasksCount: 0
+  //   }
+  //   const handler = Meteor.subscribe('tasks');
+  //     if(!handler.ready()){
+  //       return{...noDataAvailable, isLoading: true}; 
+  //   }
+  //   return false;
+
+  // } );
+
+  const { tasks, pendingTasksCount, isLoading } = useTracker(() => {
+    const noDataAvailable = { tasks: [], pendingTasksCount: 0 };
+   
+    if (!Meteor.user()) {
+      return noDataAvailable;
     }
-    return TasksCollection.find(pendingOnlyFilter).count()
+    const handler = Meteor.subscribe('tasks');
+
+    if (!handler.ready()) {
+      return { ...noDataAvailable, isLoading: true };
+    }
+
+    const tasks = TasksCollection.find(
+      hideCompleted ? pendingOnlyFilter : userFilter,
+      {
+        sort: { createdAt: -1 },
+      }
+    ).fetch();
+
+    const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
+
+    return { tasks, pendingTasksCount };
   });
 
 
-  
+  const pendingTasksTitle = `${
+      pendingTasksCount ? ` (${pendingTasksCount})` : ''
+    }`;
+    
   //for debugging
+
+
   //1 by writing directly
   console.log("User object1:", user);
   console.log("Pending tasks count1:", pendingTasksCount);
@@ -84,7 +122,7 @@ export const App = () => {
   }, [user]);
  // useEffect is better because it runs after the component is rendered and the user object is updated
 
-
+ const logout = () => Meteor.logout();// logout function called  when the button is clicked
   return(
   <div className='app'>
     <header>
@@ -111,6 +149,7 @@ export const App = () => {
             {hideCompleted ? "Show All" : "Hide Completed Tasks"}
           </button>
       </div>
+      {isLoading && <div className="loading">loading...</div>}
 
       <ul className='tasks'>
       {tasks.map(task => 
