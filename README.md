@@ -17,7 +17,7 @@ Meteor is a free and open-source isomorphic JavaScript web framework written usi
 - **Methods**: Meteor methods are used for secure server-side operations, such as adding, updating, and deleting tasks. These methods ensure that the client can only execute specific actions when authorized.
 - **Publications**: Meteor publications are utilized to define which data is sent from the server to the client. This helps in controlling what data each user can access.
 
-### Deployment
+### Deployment on Meteor Cloud
 
 The app has been deployed on Meteor Cloud/Galaxy for easy access. You can visit the deployed app [here](https://meteor-todo-list.eu.meteorapp.com/).
 
