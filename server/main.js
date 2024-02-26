@@ -7,6 +7,7 @@ import {Accounts} from 'meteor/accounts-base';//for creating user accounts
 import {TasksCollection} from '../db/TasksCollection';
 import {ServiceConfiguration} from 'meteor/service-configuration';//for github login
 import '/imports/api/tasksMethods';//importing the methods.this will register the methods on the server
+import '/imports/api/tasksPublications';//importing the publications.this will register the publications on the server
 
 const insertTask = (taskText, user) =>
   TasksCollection.insert({

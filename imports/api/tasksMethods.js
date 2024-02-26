@@ -1,5 +1,6 @@
 //creating methods to insert, remove in the task collection(DB) using Meteor methods
-//writing at common place so that it can be used in multiple places eg. TaskForm.jsx, Task.jsx
+//created after removing the default insecure packageI(allowing client to directly eidt the DB)
+//writing at common place so that it can be used in multiple places eg. TaskForm.jsx, Task.jsx and server side
 
 import { Meteor } from "meteor/meteor";
  //importing the DBcollection
@@ -8,7 +9,7 @@ import { check } from "meteor/check";
 
 Meteor.methods(
   {
-  'tasks.insert'(text) 
+  'tasks.insert'(text) //tasks is the name of the collection in the DB check db/TasksCollection.js
   {
     //check if the user is logged in
     if (!this.userId) {
